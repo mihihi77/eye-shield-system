@@ -1,36 +1,13 @@
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Layout from './layouts/Layouts';
 
-import Home from './pages/Home';
-import Alert from './pages/Alert';
-import History from './pages/History';
-import Manage from './pages/Manage';
-
-export default function App() {
-  return (
-    <Router>
-      <Layout>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/alerts" element={<Alert />} />
-          <Route path="/history" element={<History />} />
-          <Route path="/manage" element={<Manage />} />
-        </Routes>
-      </Layout>
-    </Router>
-  );
-}
-// src/App.js
 import React, { useState } from "react";
-import SettingsMenu from "./components/SettingsMenu";
-import DetectionSettings from "./components/DetectionSettings";
-import Schedule from "./components/Schedule";
-import Capture from "./components/Capture";
-import AlarmSystem from "./components/AlarmSystem";
-import Mail from "./components/Mail";
-import UploadService from "./components/UploadService";
-import About from "./components/About";
+import SettingsMenu from "../features/Settings/SettingsMenu";
+import DetectionSettings from "../features/Settings/DetectionSettings";
+import Schedule from "../features/Settings/Schedule";
+import Capture from "../features/Settings/Capture";
+import AlarmSystem from "../features/Settings/AlarmSystem";
+import Mail from "../features/Settings/Mail";
+import UploadService from "../features/Settings/UploadService";
+import About from "../features/Settings/About";
 
 const styles = {
   app: {
@@ -49,7 +26,7 @@ const styles = {
   },
 };
 
-const App = () => {
+const Settings = () => {
   const [selected, setSelected] = useState("");
 
   const renderContent = () => {
@@ -83,4 +60,4 @@ const App = () => {
   );
 };
 
-export default App;
+export default Settings;

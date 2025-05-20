@@ -1,10 +1,13 @@
+// src/pages/Alert.js
+import React from 'react';
 
-export default function Home() {
+const Home = () => {
   return (
-    <div>
-      <h1>Dashboard</h1>
-      <p>Welcome to the Smart Security System Dashboard.</p>
-      <p>Here you will see an overview of your devices and alerts.</p>
+    <div className="min-h-screen flex items-center justify-center bg-gray-200">
+      <h1 className="text-4xl font-bold">Trang Alert</h1>
+      {/* Thêm nội dung khác cho trang Alert */}
     </div>
   );
-}
+};
+
+export default Home;

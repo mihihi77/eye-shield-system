@@ -13,14 +13,11 @@ export default function Navbar() {
       <NavLink to="/" style={({ isActive }) => (isActive ? activeStyle : { color: 'white', marginRight: 15 })}>
         Home
       </NavLink>
-      <NavLink to="/alerts" style={({ isActive }) => (isActive ? activeStyle : { color: 'white', marginRight: 15 })}>
-        Alert
-      </NavLink>
       <NavLink to="/history" style={({ isActive }) => (isActive ? activeStyle : { color: 'white', marginRight: 15 })}>
         History
       </NavLink>
-      <NavLink to="/manage" style={({ isActive }) => (isActive ? activeStyle : { color: 'white' })}>
-        Manage
+      <NavLink to="/settings" style={({ isActive }) => (isActive ? activeStyle : { color: 'white' })}>
+        Settings
       </NavLink>
     </nav>
   );
