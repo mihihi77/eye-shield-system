@@ -172,7 +172,7 @@ export default function Navbar() {
               <NavLink to="/history" style={({ isActive }) => (isActive ? activeStyle : {})}>
                 History
               </NavLink>
-              <NavLink to="/manage" style={({ isActive }) => (isActive ? activeStyle : {})}>
+              <NavLink to="/settings" style={({ isActive }) => (isActive ? activeStyle : {})}>
                 Settings
               </NavLink>
             </div>
