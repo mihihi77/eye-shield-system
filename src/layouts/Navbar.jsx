@@ -3,7 +3,7 @@ import { NavLink } from 'react-router-dom';
 
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
-  const [showFilter, setShowFilter] = useState(false); // 👈 filter panel toggle
+  const [showFilter, setShowFilter] = useState(false); 
 
   const activeStyle = {
     fontWeight: 'bold',
