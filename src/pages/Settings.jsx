@@ -13,7 +13,7 @@ const styles = {
   app: {
     display: "flex",
     minHeight: "100vh",
-    fontFamily: "sans-serif",
+   
   },
   content: {
     flex: 1,
