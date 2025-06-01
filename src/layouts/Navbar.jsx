@@ -179,22 +179,6 @@ export default function Navbar() {
           </div>
           <div className="logo">Smart Security System</div>
         </div>
-
-        <div className="navbar-right">
-          <div className="search-icon" onClick={() => setShowFilter(prev => !prev)}>🔍</div>
-          {showFilter && (
-            <div className="filter-panel">
-              <div>
-                <label htmlFor="day">Day:</label>
-                <input type="date" id="day" name="day" />
-              </div>
-              <div>
-                <label htmlFor="time">Time:</label>
-                <input type="time" id="time" name="time" />
-              </div>
-            </div>
-          )}
-        </div>
       </nav>
     </>
   );
