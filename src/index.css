@@ -2,12 +2,9 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Áp dụng font-sans cho toàn bộ body */
 body {
-  margin: 0;
   @apply font-sans;
-}
-
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+  margin: 0;
+  line-height: inherit;
 }
