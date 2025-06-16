@@ -22,8 +22,8 @@ const DetectionSettings = () => {
       <button
         onClick={() => setEnabled(!enabled)}
         style={{
-          backgroundColor: enabled ? "#f472b6" : "#e0e0e0",
-          color: enabled ? "white" : "#333",
+          backgroundColor: enabled ? "#ddbb9f" : "#5390bb",
+          color: enabled ? "#584738" : "#c5f1fb",
           border: "none",
           padding: "8px 16px",
           borderRadius: "8px",

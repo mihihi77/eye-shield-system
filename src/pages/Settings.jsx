@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import SettingsMenu from "../features/Settings/SettingsMenu";
 import DetectionSettings from "../features/Settings/DetectionSettings";
@@ -18,7 +17,8 @@ const styles = {
   content: {
     flex: 1,
     padding: "2rem",
-    backgroundColor: "#f9fafb",
+    backgroundColor: "#ffe9c7",
+    borderRadius: "8px",
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
