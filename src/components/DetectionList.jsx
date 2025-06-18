@@ -1,8 +1,6 @@
-// src/components/DetectionList.jsx
 import React from 'react';
 import { Bell, Check, AlertTriangle, User, UserX, Clock } from 'lucide-react';
 
-// Helper functions (giữ nguyên)
 const getStatusIcon = (status) => {
   switch (status) {
     case 'pending':
@@ -27,12 +25,24 @@ const getBorderClass = (status) => {
   }
 };
 
-const DetectionList = ({ detections, noResultsMessage, onImageClick, classifyPerson, title }) => {
+const DetectionList = ({
+  detections = [],
+  noResultsMessage,
+  onImageClick,
+  classifyPerson,
+  title
+}) => {
+  // ⚠️ Check nếu detections không phải mảng
+  if (!Array.isArray(detections)) {
+    console.warn('⚠️ "detections" is not an array:', detections);
+    detections = [];
+  }
+
   return (
     <div className="bg-white rounded-lg shadow-lg p-6">
       <h3 className="text-xl font-semibold mb-4 flex items-center">
         <Bell className="w-6 h-6 mr-2 text-green-600" />
-        {title || "Detections"}
+        {title || 'Detections'}
         {detections.length > 0 && (
           <span className="ml-2 bg-blue-100 text-blue-800 text-sm font-medium px-2.5 py-0.5 rounded-full">
             {detections.length}
@@ -43,12 +53,15 @@ const DetectionList = ({ detections, noResultsMessage, onImageClick, classifyPer
       {detections.length === 0 ? (
         <div className="text-center py-8 text-gray-500">
           <Bell className="w-12 h-12 mx-auto mb-4 opacity-50" />
-          <p>{noResultsMessage || "No detections found."}</p>
+          <p>{noResultsMessage || 'No detections found.'}</p>
         </div>
       ) : (
         <div className="space-y-4">
           {detections.map((alert) => (
-            <div key={alert.id} className={`border-2 rounded-lg p-4 transition-all duration-200 ${getBorderClass(alert.status)}`}>
+            <div
+              key={alert.id}
+              className={`border-2 rounded-lg p-4 transition-all duration-200 ${getBorderClass(alert.status)}`}
+            >
               <div className="flex items-start space-x-4">
                 <div className="flex-shrink-0 mt-1">
                   {getStatusIcon(alert.status)}
@@ -60,17 +73,19 @@ const DetectionList = ({ detections, noResultsMessage, onImageClick, classifyPer
                       {alert.date} at {alert.time}
                     </span>
                   </div>
-                  
+
                   {alert.image && (
                     <div className="mt-2 flex items-center space-x-2">
                       <img
                         src={alert.image}
                         alt="Detection Snapshot"
-                        // Thay đổi kích thước ảnh ở đây
                         className="w-20 h-20 object-cover rounded cursor-pointer border border-gray-200 hover:opacity-80 transition-opacity"
                         onClick={() => onImageClick(alert.image)}
                       />
-                      <span className="text-sm text-blue-600 cursor-pointer hover:underline" onClick={() => onImageClick(alert.image)}>
+                      <span
+                        className="text-sm text-blue-600 cursor-pointer hover:underline"
+                        onClick={() => onImageClick(alert.image)}
+                      >
                         Click to view
                       </span>
                     </div>
@@ -102,7 +117,13 @@ const DetectionList = ({ detections, noResultsMessage, onImageClick, classifyPer
 
                   {alert.status !== 'pending' && (
                     <div className="mb-2">
-                      <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${alert.status === 'unfamiliar' ? 'bg-red-100 text-red-800' : 'bg-green-100 text-green-800'}`}>
+                      <span
+                        className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${
+                          alert.status === 'unfamiliar'
+                            ? 'bg-red-100 text-red-800'
+                            : 'bg-green-100 text-green-800'
+                        }`}
+                      >
                         {alert.status === 'unfamiliar' ? (
                           <>
                             <UserX className="w-4 h-4 mr-1" />
@@ -122,11 +143,9 @@ const DetectionList = ({ detections, noResultsMessage, onImageClick, classifyPer
             </div>
           ))}
 
-          {title === "Latest Detections" && detections.length > 0 && (
+          {title === 'Latest Detections' && detections.length > 0 && (
             <div className="text-center pt-4 border-t mt-4">
-              <p className="text-sm text-gray-500">
-                View all in History →
-              </p>
+              <p className="text-sm text-gray-500">View all in History →</p>
             </div>
           )}
         </div>

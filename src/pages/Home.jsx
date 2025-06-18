@@ -2,50 +2,51 @@ import React, { useState, useEffect } from 'react';
 import CameraFrame from "../features/Home/CameraFrame";
 import DetectionList from '../components/DetectionList';
 import ImageModal from '../components/ImageModal';
-import { addDetect, getRecentDetects, updateDetect } from '../utils/detectStorage';
+import { addDetect, listenToDetects, updateDetect } from '../utils/firebaseDetect';
 
 const Home = () => {
   const [notifications, setNotifications] = useState([]);
   const [isCapturing, setIsCapturing] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
 
+  // Realtime: chỉ lấy những detect có status === 'pending'
   useEffect(() => {
-    const data = getRecentDetects();
-    setNotifications(data);
+    const unsubscribe = listenToDetects((allDetects) => {
+      const pendingOnly = allDetects.filter((d) => d.status === 'pending');
+      setNotifications(pendingOnly);
+    });
+    return () => unsubscribe(); // cleanup khi unmount
   }, []);
 
-  const captureImage = () => {
+  // Capture ảnh và lưu lên Firebase
+  const captureImage = async (imageSrc) => {
     setIsCapturing(true);
-    setTimeout(() => {
-      const now = new Date();
-      const base64Image =
-        'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAHElEQVQYV2NkYGD4z0AEYBxVSFQAZpgwGgAAvZIBZw+l9bcAAAAASUVORK5CYII=';
-      
-      const newDetection = {
-        id: now.getTime(),
-        date: now.toISOString().split('T')[0],
-        time: now.toTimeString().split(' ')[0],
-        message: 'Camera detected motion',
-        status: 'pending',
-        image: base64Image,
-      };
-      
-      addDetect(newDetection);
-      setNotifications(getRecentDetects());
-      setIsCapturing(false);
-    }, 2000);
+    const now = new Date();
+
+    const newDetection = {
+      timestamp: now.toISOString(),
+      date: now.toISOString().split('T')[0],
+      time: now.toTimeString().split(' ')[0],
+      message: 'Camera detected motion',
+      status: 'pending',
+      image: imageSrc, // image từ webcam hoặc ESP32 sau này
+    };
+
+    await addDetect(newDetection);
+    setIsCapturing(false);
   };
 
-  const classifyPerson = (id, status) => {
-    updateDetect(id, { status: status });
-    setNotifications(getRecentDetects());
+  // Xác nhận người quen/lạ
+  const classifyPerson = async (id, status) => {
+    await updateDetect(id, { status });
+    // Không cần cập nhật thủ công vì onSnapshot tự cập nhật
   };
 
   return (
     <div className="min-h-screen bg-[#ffe9c7]">
       <div className="container mx-auto p-6">
         <h2 className="text-3xl font-bold text-center text-gray-800 mb-8">Home</h2>
-        
+
         <div className="max-w-2xl mx-auto">
           <CameraFrame isCapturing={isCapturing} onCapture={captureImage} />
         </div>

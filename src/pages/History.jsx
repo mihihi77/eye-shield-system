@@ -1,8 +1,7 @@
-// src/pages/History.jsx
 import React, { useState, useEffect } from 'react';
-import { getAllDetects } from '../utils/detectStorage';
-import DetectionList from '../components/DetectionList'; // Import DetectionList
-import ImageModal from '../components/ImageModal';     // Import ImageModal
+import { listenToDetects, updateDetect } from '../utils/firebaseDetect';
+import DetectionList from '../components/DetectionList';
+import ImageModal from '../components/ImageModal';
 
 const History = () => {
   const [alerts, setAlerts] = useState([]);
@@ -13,15 +12,17 @@ const History = () => {
   const [filterEndDate, setFilterEndDate] = useState('');
   const [filterStatus, setFilterStatus] = useState('');
 
-  // Load dữ liệu từ localStorage khi component mount
   useEffect(() => {
-    const data = getAllDetects();
-    setAlerts(data);
+    const unsubscribe = listenToDetects((allDetects) => {
+      setAlerts(Array.isArray(allDetects) ? allDetects : []);
+    });
+    return () => unsubscribe();
   }, []);
 
-  // Hàm lọc dữ liệu theo form (sẽ chạy lại khi filters hoặc alerts thay đổi)
   useEffect(() => {
-    let filtered = alerts;
+    if (!Array.isArray(alerts)) return;
+
+    let filtered = [...alerts];
 
     if (filterStartDate) {
       filtered = filtered.filter((alert) => alert.date >= filterStartDate);
@@ -40,13 +41,16 @@ const History = () => {
     });
 
     setFilteredAlerts(filtered);
-  }, [alerts, filterStartDate, filterEndDate, filterStatus]); // Dependencies
+  }, [alerts, filterStartDate, filterEndDate, filterStatus]);
 
   const clearFilters = () => {
     setFilterStartDate('');
     setFilterEndDate('');
     setFilterStatus('');
-    // useEffect sẽ tự động cập nhật filteredAlerts khi các state filter thay đổi
+  };
+
+  const classifyPerson = async (id, status) => {
+    await updateDetect(id, { status });
   };
 
   return (
@@ -54,7 +58,6 @@ const History = () => {
       <div className="container mx-auto p-6">
         <h2 className="text-3xl font-bold text-center text-gray-800 mb-8">History</h2>
 
-        {/* Form lọc - giữ nguyên UI, nhưng có thể tách thành component con FilterForm nếu muốn */}
         <div className="max-w-2xl mx-auto">
           <div className="mb-8 bg-white p-6 rounded-lg shadow-lg">
             <h3 className="text-xl font-semibold mb-4">Filter</h3>
@@ -96,7 +99,7 @@ const History = () => {
 
             <div className="flex gap-2">
               <button
-                onClick={() => { /* Lọc sẽ được trigger bởi useEffect khi state thay đổi */ }}
+                onClick={() => {}}
                 className="flex-1 bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700"
               >
                 Apply Filter
@@ -110,18 +113,17 @@ const History = () => {
             </div>
           </div>
 
-          {/* Sử dụng DetectionList component */}
+          {/* Cho phép xác nhận từ trang History */}
           <DetectionList
             detections={filteredAlerts}
             noResultsMessage="No results found."
             onImageClick={setSelectedImage}
+            classifyPerson={classifyPerson}
             title={`Detection Results (${filteredAlerts.length})`}
-            // Không truyền classifyPerson vào đây vì History không có chức năng phân loại
           />
         </div>
       </div>
 
-      {/* Sử dụng ImageModal component */}
       <ImageModal imageUrl={selectedImage} onClose={() => setSelectedImage(null)} />
     </div>
   );
