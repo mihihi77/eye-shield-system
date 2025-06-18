@@ -1,23 +1,19 @@
-// CameraFrame.jsx
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Camera } from 'lucide-react';
 
 const CameraFrame = ({ isCapturing, onCapture }) => {
-  const [cameraStream, setCameraStream] = useState(null);
-  const videoRef = useRef(null);
+  const [cameraStream, setCameraStream] = useState("");
+
+  // Địa chỉ IP của ESP32
+  const esp32IP = "192.168.4.1"; // Địa chỉ IP của ESP32, thay đổi nếu cần
+  const esp32StreamUrl = `http://${esp32IP}/stream`; // URL stream
 
   useEffect(() => {
-    if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-      navigator.mediaDevices.getUserMedia({ video: true })
-        .then(stream => {
-          setCameraStream(stream);
-          if (videoRef.current) {
-            videoRef.current.srcObject = stream;
-          }
-        })
-        .catch(err => console.log('Camera access denied or not available'));
+    // Kiểm tra xem stream có sẵn từ ESP32 không, nếu có thì thiết lập nó
+    if (esp32StreamUrl) {
+      setCameraStream(esp32StreamUrl);
     }
-  }, []);
+  }, [esp32StreamUrl]);  // Cập nhật lại khi esp32StreamUrl thay đổi
 
   return (
     <div className="bg-white rounded-lg shadow-lg p-6 mb-8">
@@ -27,14 +23,13 @@ const CameraFrame = ({ isCapturing, onCapture }) => {
       </h3>
 
       <div className="relative bg-black rounded-lg overflow-hidden mb-4" style={{ aspectRatio: '16/9' }}>
-        <video
-          ref={videoRef}
-          autoPlay
-          playsInline
-          muted
-          className="w-full h-full object-cover"
-        />
-        {!cameraStream && (
+        {cameraStream ? (
+          <img
+            src={cameraStream}
+            alt="ESP32 Camera Feed"
+            className="w-full h-full object-cover"
+          />
+        ) : (
           <div className="absolute inset-0 flex items-center justify-center text-white">
             <div className="text-center">
               <Camera className="w-16 h-16 mx-auto mb-4 opacity-50" />
