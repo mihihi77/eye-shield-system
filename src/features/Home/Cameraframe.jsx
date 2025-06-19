@@ -1,35 +1,61 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useLayoutEffect } from 'react';
 import Webcam from 'react-webcam';
 import { Camera } from 'lucide-react';
 import nipplejs from 'nipplejs';
 
 const CameraFrame = ({ isCapturing, onCapture }) => {
   const webcamRef = useRef(null);
-  const joystickRef = useRef(null); // Ref để tránh render nhiều joystick
+  const joystickRef = useRef(null);
+  const joystickZoneRef = useRef(null);
 
   const handleCapture = () => {
     const imageSrc = webcamRef.current.getScreenshot();
     if (imageSrc) {
-      onCapture(imageSrc); // Gửi ảnh base64 thật lên Firebase
+      onCapture(imageSrc);
     }
   };
 
-  // Khởi tạo joystick sau khi render
-  useEffect(() => {
-    if (joystickRef.current) return; // Tránh gắn lại nếu đã gắn
+  useLayoutEffect(() => {
+    if (joystickRef.current || !joystickZoneRef.current) return;
 
-    const zone = document.getElementById('joystick-container');
-    if (zone) {
-      joystickRef.current = nipplejs.create({
-        zone: zone,
-        mode: 'static',
-        position: { left: '100%', top: '55%' },
-        color: '#f34d4d',              // Màu xám
-        size: 65,                   // To hơn (mặc định là 60)
-        restOpacity: 0.8,           // Trong suốt nhẹ khi không di chuyển
-        dynamicPage: true 
-      });
-    }
+    joystickRef.current = nipplejs.create({
+      zone: joystickZoneRef.current,
+      mode: 'static',
+      position: { left: '50%', top: '50%' },
+      color: '#f34d4d',
+      size: 75,
+      threshold: 0.1,
+      fadeTime: 100,
+      restOpacity: 0.8,
+      dynamicPage: false, // ❗️ Bắt buộc để gắn vào đúng vùng, không đè
+      multitouch: false,
+      lockX: false,
+      lockY: false,
+      restJoystick: true,
+      catchDistance: 100,
+      shape: 'circle',
+      maxRange: 80
+    });
+
+    joystickRef.current.on('start', (evt, data) => {
+      console.log('Joystick start:', data);
+    });
+
+    joystickRef.current.on('move', (evt, data) => {
+      const { angle, distance, vector } = data;
+      console.log('Joystick move:', { angle: angle?.degree, distance, vector });
+    });
+
+    joystickRef.current.on('end', () => {
+      console.log('Joystick end');
+    });
+
+    return () => {
+      if (joystickRef.current) {
+        joystickRef.current.destroy();
+        joystickRef.current = null;
+      }
+    };
   }, []);
 
   return (
@@ -47,8 +73,7 @@ const CameraFrame = ({ isCapturing, onCapture }) => {
         />
       </div>
 
-      {/* Nút + Joystick nằm ngang */}
-      <div className="flex justify-center items-center gap-0">
+      <div className="flex justify-center items-center gap-6">
         <button
           onClick={handleCapture}
           disabled={isCapturing}
@@ -69,8 +94,16 @@ const CameraFrame = ({ isCapturing, onCapture }) => {
           )}
         </button>
 
-        {/* Joystick nằm bên phải nút */}
-        <div id="joystick-container" className="w-[80px] h-[80px] relative"></div>
+        {/* Joystick zone - đã fix z-index và interaction */}
+        <div className="flex flex-col items-center">
+          <div
+            ref={joystickZoneRef}
+            className="w-[90px] h-[90px] relative z-0 bg-gray-100 border-2 border-gray-300 rounded-full
+                     overflow-visible touch-none select-none cursor-pointer
+                     hover:bg-gray-200 transition-colors duration-150 shadow-inner"
+          ></div>
+          <span className="text-xs text-gray-500 mt-2 select-none">Control</span>
+        </div>
       </div>
     </div>
   );
