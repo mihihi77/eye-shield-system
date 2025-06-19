@@ -6,6 +6,7 @@ import Home from './pages/Home';
 import History from './pages/History';
 import Settings from './pages/Settings';
 
+
 export default function App() {
   return (
     <Router>
