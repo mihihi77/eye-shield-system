@@ -243,7 +243,7 @@ const Home = () => {
   return (
     <div className="min-h-screen bg-[#ffe9c7]">
       <div className="container mx-auto p-6">
-        <h2 className="text-3xl font-bold text-center text-gray-800 mb-8">EyeShield Home Dashboard</h2>
+        
 
         {/* --- KHU VỰC HIỂN THỊ ẢNH VÀ PHẢN HỒI TỪ ESP32-CAM/FLASK --- */}
         <div className="max-w-2xl mx-auto mb-12 bg-white shadow-lg rounded-lg p-6">

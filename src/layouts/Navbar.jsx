@@ -33,21 +33,21 @@ export default function Navbar() {
               <NavLink
                 to="/"
                 style={({ isActive }) => (isActive ? activeStyle : {})}
-                className="py-2 border-b border-gray-600 hover:bg-gray-600 hover:text-red-500 hover:pl-2 transition-all"
+                className="py-2 border-b border-gray-600 hover:bg-gray-600 hover:text-[#fd8c4a] hover:pl-2 transition-all"
               >
                 Home
               </NavLink>
               <NavLink
                 to="/history"
                 style={({ isActive }) => (isActive ? activeStyle : {})}
-                className="py-2 border-b border-gray-600 hover:bg-gray-600 hover:text-red-500 hover:pl-2 transition-all"
+                className="py-2 border-b border-gray-600 hover:bg-gray-600 hover:text-[#fd8c4a] hover:pl-2 transition-all"
               >
                 History
               </NavLink>
               <NavLink
                 to="/settings"
                 style={({ isActive }) => (isActive ? activeStyle : {})}
-                className="py-2 hover:bg-gray-600 hover:text-red-500 hover:pl-2 transition-all"
+                className="py-2 hover:bg-gray-600 hover:text-[#fd8c4a] hover:pl-2 transition-all"
               >
                 Settings
               </NavLink>
@@ -55,7 +55,7 @@ export default function Navbar() {
           </div>
 
           {/* Logo */}
-          <div className="font-bold transition-transform hover:scale-110 hover:text-red-500">
+          <div className="font-bold transition-transform hover:scale-110 hover:text-[#fd8c4a]">
             EyeShield
           </div>
         </div>
