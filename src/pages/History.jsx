@@ -56,7 +56,7 @@ const History = () => {
   return (
     <div className="min-h-screen bg-[#ffe9c7]">
       <div className="container mx-auto p-6">
-        <h2 className="text-3xl font-bold text-center text-gray-800 mb-8">History</h2>
+      
 
         <div className="max-w-2xl mx-auto">
           <div className="mb-8 bg-white p-6 rounded-lg shadow-lg">
