@@ -1,5 +1,6 @@
 {
   "name": "eye-shield-dashboard",
+  "proxy": "http://192.168.1.38:5000",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
