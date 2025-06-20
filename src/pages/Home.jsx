@@ -7,7 +7,7 @@ import { addDetect, listenToDetects, updateDetect } from '../utils/firebaseDetec
 import '../App.css'; // File CSS chung hoặc tạo Home.css nếu bạn muốn
 
 // Đảm bảo BASE_BACKEND_URL khớp với địa chỉ và cổng của server Flask của bạn
-const BASE_BACKEND_URL = 'http://172.20.10.2:5000'; // Đổi IP này thành IP của backend Flask của bạn
+const BASE_BACKEND_URL = 'http://192.168.1.38:5000'; // Đổi IP này thành IP của backend Flask của bạn
 
 const Home = () => {
   // --- STATE CŨ TỪ FIREBASE VÀ WEBCAM ---
